@@ -122,7 +122,6 @@ contract CentralizedArbitratorWithAppeal is IArbitrator {
 
     function appeal(uint256 _disputeID, bytes memory _extraData) public payable override {
         Dispute storage dispute = disputes[_disputeID];
-        dispute.appealCount++;
 
         uint256 requiredAmount = appealCost(_disputeID, _extraData);
         if (msg.value < requiredAmount) {
@@ -137,6 +136,7 @@ contract CentralizedArbitratorWithAppeal is IArbitrator {
             revert AfterAppealPeriodEnd(block.timestamp, dispute.appealPeriodEnd);
         }
 
+        dispute.appealCount++;
         dispute.status = DisputeStatus.Waiting;
 
         emit AppealDecision(_disputeID, dispute.arbitrated);
